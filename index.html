@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0B0D10">
+  <meta name="theme-color" content="#000000">
   <title>ARRIVE</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,11 +12,8 @@
 
   <style>
     :root {
-      --bg-gradient: linear-gradient(-45deg, #0f2027, #203a43, #2c5364);
-      --bg-size: 400% 400%;
       --text-primary: #E6E7EA;
-      --text-secondary: #BCC2C8;
-      --accent: #6F7C8C;
+      --text-secondary: #F3F4F6;
       --transition-speed: 0.8s;
     }
 
@@ -36,30 +33,35 @@
     }
 
     body {
+      background-color: #000000;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--bg-gradient);
-      background-size: var(--bg-size);
-      animation: gradientMove 30s ease infinite;
-      transition: background 2s ease;
     }
 
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    /* --- BACKGROUND LAYERS --- */
+    #bg-image-layer {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -2;
+      background-size: cover; background-position: center; background-repeat: no-repeat;
+      transition: opacity 1s ease-in-out;
+      opacity: 0;
+      filter: brightness(0.6) contrast(1.1);
+    }
+
+    #bg-vignette-layer {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      background: radial-gradient(circle at center, transparent 0%, transparent 40%, rgba(0,0,0,0.7) 100%);
+      pointer-events: none;
     }
 
     .container {
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       padding: 40px 32px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      z-index: 1;
     }
 
     .primary {
@@ -67,64 +69,41 @@
       font-size: clamp(1.75rem, 4vw, 2.5rem); 
       letter-spacing: -0.02em;
       line-height: 1.25;
-      margin-bottom: 48px; /* Adjusted spacing */
+      margin-bottom: 48px; 
       min-height: 2.5em; 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       transition: opacity var(--transition-speed) ease;
       opacity: 1;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      text-shadow: 0 4px 20px rgba(0,0,0,0.8);
     }
 
-    .primary.is-hidden {
-      opacity: 0;
-    }
+    .primary.is-hidden { opacity: 0; }
 
     .divider {
-      width: 120px;
-      height: 1px;
-      background: rgba(0, 0, 0, 0.15); 
-      opacity: 1;
-      margin-bottom: 48px; /* Adjusted spacing for symmetry */
+      width: 120px; height: 1px;
+      background: rgba(255, 255, 255, 0.4); 
+      opacity: 0.8; margin-bottom: 48px; 
       transition: opacity var(--transition-speed);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.4);
     }
 
     .secondary {
-      font-weight: 400;
-      font-size: 18px;
-      color: #F3F4F6; 
-      letter-spacing: 0.02em;
-      margin-bottom: 32px;
-      min-height: 1.5em;
-      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+      font-weight: 400; font-size: 18px; color: #F3F4F6; 
+      letter-spacing: 0.02em; margin-bottom: 32px; min-height: 1.5em;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
     }
 
     /* --- WEATHER STYLES --- */
     .weather-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      opacity: 0;
-      transform: translateY(10px);
+      display: flex; flex-direction: column; align-items: center;
+      opacity: 0; transform: translateY(10px);
       transition: opacity 1s ease, transform 1s ease;
       margin-bottom: 48px;
     }
 
-    .weather-container.visible {
-      opacity: 0.8;
-      transform: translateY(0);
-    }
+    .weather-container.visible { opacity: 0.8; transform: translateY(0); }
 
-    .weather-icon {
-      width: 40px; 
-      height: 40px;
-      position: relative;
-      margin-bottom: 8px;
-      opacity: 0.9;
-    }
-
+    .weather-icon { width: 40px; height: 40px; position: relative; margin-bottom: 8px; opacity: 0.9; }
     .weather-icon.is-sun {
       width: 28px; height: 28px; background: #fff; border-radius: 50%;
       box-shadow: 0 0 20px rgba(255,255,255,0.4);
@@ -172,44 +151,31 @@
     @keyframes snow { 0% {transform: translateY(0); opacity:0;} 50% {opacity:1;} 100% {transform: translateY(6px); opacity:0;} }
 
     .weather-temp {
-      font-size: 14px;
-      font-weight: 300;
-      letter-spacing: 0.05em;
-      color: #F3F4F6;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+      font-size: 14px; font-weight: 300; letter-spacing: 0.05em;
+      color: #F3F4F6; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
     }
 
     /* --- BREATHING CIRCLE --- */
     .breathing {
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      position: relative;
-      z-index: 2;
+      width: 140px; height: 140px; border-radius: 50%; position: relative; z-index: 2;
       border: 2px solid rgba(255, 255, 255, 0.4);
       box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
       transition: opacity 2s ease, border-color 2s ease;
       animation: breathe 13s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
     }
-
     .breathing::before {
-      content: "";
-      position: absolute;
-      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
       width: 220px; height: 220px; border-radius: 50%; z-index: -1;
       background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
-      filter: blur(20px);
-      animation: auraPulse 13s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+      filter: blur(20px); animation: auraPulse 13s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
       pointer-events: none;
     }
-
     @keyframes breathe {
       0%   { transform: scale(0.92); opacity: 0.6; box-shadow: 0 0 10px rgba(255, 255, 255, 0.02); }
       40%  { transform: scale(1.0);  opacity: 0.9; box-shadow: 0 0 25px rgba(255, 255, 255, 0.12); }
       50%  { transform: scale(1.0);  opacity: 0.9; box-shadow: 0 0 25px rgba(255, 255, 255, 0.12); }
       100% { transform: scale(0.92); opacity: 0.6; box-shadow: 0 0 10px rgba(255, 255, 255, 0.02); }
     }
-
     @keyframes auraPulse {
       0%   { transform: translate(-50%, -50%) scale(0.85); opacity: 0.3; }
       40%  { transform: translate(-50%, -50%) scale(1.15); opacity: 0.7; }
@@ -217,15 +183,47 @@
       100% { transform: translate(-50%, -50%) scale(0.85); opacity: 0.3; }
     }
 
-    /* --- FULLSCREEN BUTTON --- */
+    /* --- ENHANCED FULLSCREEN BUTTON (Car Friendly) --- */
     #fs-toggle {
-      position: fixed; bottom: 32px; right: 32px; width: 44px; height: 44px;
-      background: transparent; border: none; cursor: pointer; opacity: 0.15;
-      transition: opacity 0.3s, transform 0.2s;
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      
+      /* 1. Huge Touch Target for Car Screens */
+      width: 80px;
+      height: 80px;
+      
+      border-radius: 50%; /* Circular shape */
+      background: rgba(0, 0, 0, 0.3); /* Frosted glass effect */
+      border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle rim so it's visible on light photos */
+      
+      cursor: pointer;
+      opacity: 0.4; /* Visible but not distracting */
+      transition: transform 0.1s ease, opacity 0.3s, background 0.3s;
       display: flex; align-items: center; justify-content: center; z-index: 100;
+      backdrop-filter: blur(5px); /* Modern touch */
     }
-    #fs-toggle:hover, #fs-toggle:active { opacity: 0.8; transform: scale(1.1); }
-    #fs-toggle svg { width: 24px; height: 24px; fill: #E6E7EA; }
+
+    #fs-toggle:hover {
+      opacity: 0.9;
+      background: rgba(255, 255, 255, 0.1); /* Lighten on hover */
+    }
+
+    /* Tactile feedback for touch screens */
+    #fs-toggle:active {
+      transform: scale(0.95);
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    #fs-toggle svg {
+      /* 2. Larger Icon */
+      width: 32px;
+      height: 32px;
+      fill: #E6E7EA; 
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+      pointer-events: none;
+    }
 
     /* Night mode */
     .night .secondary { opacity: 1; transition: opacity 2s ease; }
@@ -235,7 +233,7 @@
     .night .breathing::before { opacity: 0.1; }
 
     @media (prefers-reduced-motion: reduce) {
-      body { animation: none; }
+      #bg-image-layer, #bg-vignette-layer { transition: none; }
       .breathing, .weather-icon, .breathing::before { animation: none; }
       .weather-icon::after { display: none; } 
       .breathing::before { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
@@ -243,6 +241,9 @@
   </style>
 </head>
 <body>
+  <div id="bg-image-layer"></div>
+  <div id="bg-vignette-layer"></div>
+
   <div class="container">
     <div class="primary" id="primaryText">Arrive calm.</div>
     <div class="divider"></div>
@@ -265,61 +266,41 @@
   <script>
     /* --- CONFIGURATION --- */
     const primaryPhrases = {
-      morning: [
-        "Let the day unfold.", "Start without urgency.", "You’re already moving.",
-        "Breath in light.", "Welcome the newness.", "Begin here.",
-        "The world is waking up with you.", "Find your rhythm.", "No rush. Just breathe.",
-        "A clean slate.", "Today unfolds slowly."
-      ],
-      afternoon: [
-        "Stay in flow.", "Nothing to force.", "This is steady time.",
-        "Steady as you go.", "You are doing enough.", "Pause for a moment.",
-        "The flow is with you.", "One step at a time.", "Be where you are.",
-        "Stillness in motion.", "Keep it simple."
-      ],
-      evening: [
-        "Begin to unwind.", "Arriving calm matters.", "Let the drive soften you.",
-        "Release the day.", "Let go.", "The sky is turning.",
-        "Welcome the quiet.", "Arrive home to yourself.", "Unclench your jaw.",
-        "Ease the mind.", "Slow down."
-      ],
-      night: [
-        "Arrive quietly.", "Nothing else right now.", "Just the road.",
-        "Rest in darkness.", "The world is sleeping.", "Nothing to solve now.",
-        "Just be.", "Deep peace.", "Close your eyes.",
-        "Let the silence in.", "Safe. Silent. Still."
-      ]
+      morning: ["Let's day unfold.", "Start without urgency.", "You’re already moving.", "Breath in light.", "Welcome to newness.", "Begin here.", "The world is waking up with you.", "Find your rhythm.", "No rush. Just breathe.", "A clean slate.", "Today unfolds slowly."],
+      afternoon: ["Stay in flow.", "Nothing to force.", "This is steady time.", "Steady as you go.", "You are doing enough.", "Pause for a moment.", "The flow is with you.", "One step at a time.", "Be where you are.", "Stillness in motion.", "Keep it simple."],
+      evening: ["Begin to unwind.", "Arriving calm matters.", "Let's drive soften you.", "Release the day.", "Let go.", "The sky is turning.", "Welcome to quiet.", "Arrive home to yourself.", "Unclench your jaw.", "Ease your mind.", "Slow down."],
+      night: ["Arrive quietly.", "Nothing else right now.", "Just the road.", "Rest in darkness.", "The world is sleeping.", "Nothing to solve now.", "Just be.", "Deep peace.", "Close your eyes.", "Let's silence in.", "Safe. Silent. Still."]
     };
 
-    // --- DYNAMIC WEATHER & TIME MATRIX ---
-    const backgroundGradients = {
+    // --- CINEMATIC BACKGROUND MATRIX ---
+    const backgroundThemes = {
       morning: {
-        clear: 'linear-gradient(-45deg, #4facfe, #00f2fe)',      
-        cloud: 'linear-gradient(-45deg, #89f7fe, #66a6ff)',      
-        rain:  'linear-gradient(-45deg, #243B55, #141E30)',      
-        snow:  'linear-gradient(-45deg, #E6DADA, #274046)',      
-        fog:   'linear-gradient(-45deg, #D7D2CC, #304352)'       
+        clear: { img: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.1.0&auto=format&fit=crop&w=1920&q=80' },
+        cloud: { img: 'https://images.unsplash.com/photo-1615609516838-835e9b562d1a?ixlib=rb-4.1.0&auto=format&fit=crop&w=1920&q=80' },
+        rain:  { img: 'https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?ixlib=rb-4.1.0&auto=format&fit=crop&w=1920&q=80' },
+        snow:  { img: 'https://images.unsplash.com/photo-1491002052546-bf38f186af56?ixlib=rb-4.1.0&auto=format&fit=crop&w=1920&q=80' },
+        fog:   { img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.1.0&auto=format&fit=crop&w=1920&q=80' }
       },
       afternoon: {
-        clear: 'linear-gradient(-45deg, #606c88, #3f4c6b)',      
-        cloud: 'linear-gradient(-45deg, #485563, #29323c)',      
-        rain:  'linear-gradient(-45deg, #373B44, #4286f4)',      
-        snow:  'linear-gradient(-45deg, #83a4d4, #b6fbff)',      
-        fog:   'linear-gradient(-45deg, #757F9A, #D7DDE8)'       
+        clear: { img: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.1.0&auto=format&fit=crop&w=1920&q=80' },
+        cloud: { img: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.1.0&auto=format&fit=crop&w=1920&q=80' },
+        rain:  { img: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?ixlib=rb-4.1.0&auto=format&fit=crop&w=1920&q=80' },
+        snow:  { img: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.1.0&auto=format&fit=crop&w=1920&q=80' },
+        fog:   { img: 'https://images.unsplash.com/photo-1614677427581-51148a932a9e?ixlib=rb-4.1.0&auto=format&fit=crop&w=1920&q=80' }
       },
       evening: {
-        clear: 'linear-gradient(-45deg, #0f2027, #203a43, #2c5364)', 
-        cloud: 'linear-gradient(-45deg, #232526, #414345)',        
-        rain:  'linear-gradient(-45deg, #141E30, #243B55)',        
-        snow:  'linear-gradient(-45deg, #304352, #d7d2cc)',        
-        fog:   'linear-gradient(-45deg, #485563, #29323c)'         
+        clear: { img: 'https://images.unsplash.com/photo-1507400492013-162706c8c05e?ixlib=rb-4.1.0&auto=format&fit=crop&w=1920&q=80' },
+        cloud: { img: 'https://images.unsplash.com/photo-1473186578172-c141e6798cf4?ixlib=rb-4.1.0&auto=format&fit=crop&w=1920&q=80' },
+        rain:  { img: 'https://images.unsplash.com/photo-1516934024742-b461fba47600?ixlib=rb-4.1.0&auto=format&fit=crop&w=1920&q=80' },
+        snow:  { img: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-4.1.0&auto=format&fit=crop&w=1920&q=80' },
+        fog:   { img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.1.0&auto=format&fit=crop&w=1920&q=80' }
       },
       night: {
-        clear: 'linear-gradient(-45deg, #0f0c29, #302b63, #24243e)', 
-        cloud: 'linear-gradient(-45deg, #000000, #434343)',        
-        rain:  'linear-gradient(-45deg, #000000, #0f0c29)',        
-        snow:  'linear-gradient(-45deg, #1e130c, #9a8478)',        
-        fog:   'linear-gradient(-45deg, #3E5151, #DECBA4)'          
+        clear: { img: 'https://images.unsplash.com/photo-1533669955142-6a73332af4db?ixlib=rb-4.1.0&auto=format&fit=crop&w=1920&q=80' },
+        cloud: { img: 'https://images.unsplash.com/photo-1534073828943-f801091a7d58?ixlib=rb-4.1.0&auto=format&fit=crop&w=1920&q=80' },
+        rain:  { img: 'https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?ixlib=rb-4.1.0&auto=format&fit=crop&w=1920&q=80' },
+        snow:  { img: 'https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?ixlib=rb-4.1.0&auto=format&fit=crop&w=1920&q=80' },
+        fog:   { img: 'https://images.unsplash.com/photo-1500042037927-c7d9260c3342?ixlib=rb-4.1.0&auto=format&fit=crop&w=1920&q=80' }
       }
     };
 
@@ -355,13 +336,9 @@
 
               updateBackground(getPhase(new Date().getHours()));
             })
-            .catch(err => {
-              console.log("Weather fetch failed.");
-            });
+            .catch(err => { console.log("Weather fetch failed."); });
         },
-        (error) => {
-          console.log("Location access denied.");
-        }
+        (error) => { console.log("Location access denied."); }
       );
     }
 
@@ -403,9 +380,21 @@
 
     function updateBackground(phase) {
       const weatherType = currentWeatherType || 'clear';
-      const newGradient = backgroundGradients[phase][weatherType];
-      
-      document.body.style.background = newGradient;
+      const theme = backgroundThemes[phase][weatherType];
+      const bgLayer = document.getElementById('bg-image-layer');
+      const newUrl = theme.img;
+
+      if (bgLayer.style.backgroundImage.includes(newUrl)) return;
+
+      const loader = new Image();
+      loader.src = newUrl;
+      loader.onload = () => {
+        bgLayer.style.opacity = '0';
+        setTimeout(() => {
+          bgLayer.style.backgroundImage = `url('${newUrl}')`;
+          bgLayer.style.opacity = '1';
+        }, 1000);
+      };
     }
 
     function updateClockAndPhase() {
@@ -422,15 +411,12 @@
 
       const phase = getPhase(hour);
 
-      // Update Time Display
       document.getElementById("secondaryText").textContent =
         displayDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) +
         " — " + phase.charAt(0).toUpperCase() + phase.slice(1);
 
-      // Update Dynamic Background
       updateBackground(phase);
 
-      // Handle Phase Classes
       if (document.body.classList.contains("night") !== (phase === "night")) {
         document.body.classList.toggle("night", phase === "night");
         updatePrimaryText(phase);
@@ -449,9 +435,9 @@
 
     function updateFsIcon() {
       if (document.fullscreenElement) {
-        iconExpand.style.display = 'none'; iconCompress.style.display = 'block'; fsBtn.style.opacity = '0.5';
+        iconExpand.style.display = 'none'; iconCompress.style.display = 'block';
       } else {
-        iconExpand.style.display = 'block'; iconCompress.style.display = 'none'; fsBtn.style.opacity = ''; 
+        iconExpand.style.display = 'block'; iconCompress.style.display = 'none';
       }
     }
     fsBtn.addEventListener('click', toggleFullScreen);
