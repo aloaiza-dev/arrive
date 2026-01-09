@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0B0D10">
+  <title>ARRIVE</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(-45deg, #0f2027, #203a43, #2c5364);
+      --bg-size: 400% 400%;
+      --text-primary: #E6E7EA;
+      --text-secondary: #BCC2C8;
+      --accent: #6F7C8C;
+      --transition-speed: 0.8s;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      color: var(--text-primary);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow: hidden;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-gradient);
+      background-size: var(--bg-size);
+      animation: gradientMove 30s ease infinite;
+      transition: background 2s ease;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      width: 100%;
+      height: 100%;
+      padding: 40px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .primary {
+      font-weight: 400;
+      font-size: clamp(1.75rem, 4vw, 2.5rem); 
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      margin-bottom: 48px; /* Adjusted spacing */
+      min-height: 2.5em; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity var(--transition-speed) ease;
+      opacity: 1;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .primary.is-hidden {
+      opacity: 0;
+    }
+
+    .divider {
+      width: 120px;
+      height: 1px;
+      background: rgba(0, 0, 0, 0.15); 
+      opacity: 1;
+      margin-bottom: 48px; /* Adjusted spacing for symmetry */
+      transition: opacity var(--transition-speed);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .secondary {
+      font-weight: 400;
+      font-size: 18px;
+      color: #F3F4F6; 
+      letter-spacing: 0.02em;
+      margin-bottom: 32px;
+      min-height: 1.5em;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    /* --- WEATHER STYLES --- */
+    .weather-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 1s ease, transform 1s ease;
+      margin-bottom: 48px;
+    }
+
+    .weather-container.visible {
+      opacity: 0.8;
+      transform: translateY(0);
+    }
+
+    .weather-icon {
+      width: 40px; 
+      height: 40px;
+      position: relative;
+      margin-bottom: 8px;
+      opacity: 0.9;
+    }
+
+    .weather-icon.is-sun {
+      width: 28px; height: 28px; background: #fff; border-radius: 50%;
+      box-shadow: 0 0 20px rgba(255,255,255,0.4);
+      animation: sunPulse 4s ease-in-out infinite;
+    }
+    @keyframes sunPulse { 0%,100% {opacity: 0.8;} 50% {opacity: 1;} }
+
+    .weather-icon.is-cloud, .weather-icon.is-fog {
+      width: 34px; height: 14px; background: rgba(255,255,255,0.6); border-radius: 10px;
+      position: relative; top: 10px; box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    }
+    .weather-icon.is-cloud::after {
+      content: ''; position: absolute; width: 16px; height: 16px;
+      background: rgba(255,255,255,0.6); border-radius: 50%; top: -8px; left: 6px;
+    }
+
+    .weather-icon.is-rain {
+      width: 34px; height: 14px; background: rgba(255,255,255,0.6); border-radius: 10px;
+      position: relative; top: 10px;
+    }
+    .weather-icon.is-rain::before {
+      content: ''; position: absolute; width: 16px; height: 16px;
+      background: rgba(255,255,255,0.6); border-radius: 50%; top: -8px; left: 6px;
+    }
+    .weather-icon.is-rain::after {
+      content: ''; position: absolute; width: 3px; height: 5px;
+      background: rgba(255,255,255,0.8); top: 14px; left: 15.5px;
+      animation: drop 1.5s linear infinite;
+    }
+    @keyframes drop { 0% {transform: translateY(0); opacity:0;} 50% {opacity:1;} 100% {transform: translateY(6px); opacity:0;} }
+
+    .weather-icon.is-snow {
+      width: 34px; height: 14px; background: rgba(255,255,255,0.6); border-radius: 10px;
+      position: relative; top: 10px;
+    }
+    .weather-icon.is-snow::before {
+      content: ''; position: absolute; width: 16px; height: 16px;
+      background: rgba(255,255,255,0.6); border-radius: 50%; top: -8px; left: 6px;
+    }
+    .weather-icon.is-snow::after {
+      content: ''; position: absolute; width: 5px; height: 5px;
+      background: rgba(255,255,255,0.8); border-radius: 50%;
+      top: 12px; left: 14.5px; animation: snow 2s linear infinite;
+    }
+    @keyframes snow { 0% {transform: translateY(0); opacity:0;} 50% {opacity:1;} 100% {transform: translateY(6px); opacity:0;} }
+
+    .weather-temp {
+      font-size: 14px;
+      font-weight: 300;
+      letter-spacing: 0.05em;
+      color: #F3F4F6;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    /* --- BREATHING CIRCLE --- */
+    .breathing {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      position: relative;
+      z-index: 2;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+      transition: opacity 2s ease, border-color 2s ease;
+      animation: breathe 13s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+    }
+
+    .breathing::before {
+      content: "";
+      position: absolute;
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 220px; height: 220px; border-radius: 50%; z-index: -1;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+      filter: blur(20px);
+      animation: auraPulse 13s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+      pointer-events: none;
+    }
+
+    @keyframes breathe {
+      0%   { transform: scale(0.92); opacity: 0.6; box-shadow: 0 0 10px rgba(255, 255, 255, 0.02); }
+      40%  { transform: scale(1.0);  opacity: 0.9; box-shadow: 0 0 25px rgba(255, 255, 255, 0.12); }
+      50%  { transform: scale(1.0);  opacity: 0.9; box-shadow: 0 0 25px rgba(255, 255, 255, 0.12); }
+      100% { transform: scale(0.92); opacity: 0.6; box-shadow: 0 0 10px rgba(255, 255, 255, 0.02); }
+    }
+
+    @keyframes auraPulse {
+      0%   { transform: translate(-50%, -50%) scale(0.85); opacity: 0.3; }
+      40%  { transform: translate(-50%, -50%) scale(1.15); opacity: 0.7; }
+      50%  { transform: translate(-50%, -50%) scale(1.15); opacity: 0.7; }
+      100% { transform: translate(-50%, -50%) scale(0.85); opacity: 0.3; }
+    }
+
+    /* --- FULLSCREEN BUTTON --- */
+    #fs-toggle {
+      position: fixed; bottom: 32px; right: 32px; width: 44px; height: 44px;
+      background: transparent; border: none; cursor: pointer; opacity: 0.15;
+      transition: opacity 0.3s, transform 0.2s;
+      display: flex; align-items: center; justify-content: center; z-index: 100;
+    }
+    #fs-toggle:hover, #fs-toggle:active { opacity: 0.8; transform: scale(1.1); }
+    #fs-toggle svg { width: 24px; height: 24px; fill: #E6E7EA; }
+
+    /* Night mode */
+    .night .secondary { opacity: 1; transition: opacity 2s ease; }
+    .night .divider { opacity: 0.4; }
+    .night .weather-container { opacity: 0.5; } 
+    .night .breathing { animation-duration: 18s; opacity: 0.4; border-color: rgba(255, 255, 255, 0.2); box-shadow: none; }
+    .night .breathing::before { opacity: 0.1; }
+
+    @media (prefers-reduced-motion: reduce) {
+      body { animation: none; }
+      .breathing, .weather-icon, .breathing::before { animation: none; }
+      .weather-icon::after { display: none; } 
+      .breathing::before { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="primary" id="primaryText">Arrive calm.</div>
+    <div class="divider"></div>
+    <div class="secondary" id="secondaryText">--:--</div>
+    
+    <!-- Weather Section -->
+    <div class="weather-container" id="weatherContainer">
+      <div class="weather-icon" id="weatherIcon"></div>
+      <div class="weather-temp" id="weatherTemp"></div>
+    </div>
+
+    <div class="breathing"></div>
+  </div>
+
+  <button id="fs-toggle" aria-label="Toggle Fullscreen">
+    <svg id="icon-expand" viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+    <svg id="icon-compress" viewBox="0 0 24 24" style="display: none;"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>
+  </button>
+
+  <script>
+    /* --- CONFIGURATION --- */
+    const primaryPhrases = {
+      morning: [
+        "Let the day unfold.", "Start without urgency.", "You’re already moving.",
+        "Breath in light.", "Welcome the newness.", "Begin here.",
+        "The world is waking up with you.", "Find your rhythm.", "No rush. Just breathe.",
+        "A clean slate.", "Today unfolds slowly."
+      ],
+      afternoon: [
+        "Stay in flow.", "Nothing to force.", "This is steady time.",
+        "Steady as you go.", "You are doing enough.", "Pause for a moment.",
+        "The flow is with you.", "One step at a time.", "Be where you are.",
+        "Stillness in motion.", "Keep it simple."
+      ],
+      evening: [
+        "Begin to unwind.", "Arriving calm matters.", "Let the drive soften you.",
+        "Release the day.", "Let go.", "The sky is turning.",
+        "Welcome the quiet.", "Arrive home to yourself.", "Unclench your jaw.",
+        "Ease the mind.", "Slow down."
+      ],
+      night: [
+        "Arrive quietly.", "Nothing else right now.", "Just the road.",
+        "Rest in darkness.", "The world is sleeping.", "Nothing to solve now.",
+        "Just be.", "Deep peace.", "Close your eyes.",
+        "Let the silence in.", "Safe. Silent. Still."
+      ]
+    };
+
+    // --- DYNAMIC WEATHER & TIME MATRIX ---
+    const backgroundGradients = {
+      morning: {
+        clear: 'linear-gradient(-45deg, #4facfe, #00f2fe)',      
+        cloud: 'linear-gradient(-45deg, #89f7fe, #66a6ff)',      
+        rain:  'linear-gradient(-45deg, #243B55, #141E30)',      
+        snow:  'linear-gradient(-45deg, #E6DADA, #274046)',      
+        fog:   'linear-gradient(-45deg, #D7D2CC, #304352)'       
+      },
+      afternoon: {
+        clear: 'linear-gradient(-45deg, #606c88, #3f4c6b)',      
+        cloud: 'linear-gradient(-45deg, #485563, #29323c)',      
+        rain:  'linear-gradient(-45deg, #373B44, #4286f4)',      
+        snow:  'linear-gradient(-45deg, #83a4d4, #b6fbff)',      
+        fog:   'linear-gradient(-45deg, #757F9A, #D7DDE8)'       
+      },
+      evening: {
+        clear: 'linear-gradient(-45deg, #0f2027, #203a43, #2c5364)', 
+        cloud: 'linear-gradient(-45deg, #232526, #414345)',        
+        rain:  'linear-gradient(-45deg, #141E30, #243B55)',        
+        snow:  'linear-gradient(-45deg, #304352, #d7d2cc)',        
+        fog:   'linear-gradient(-45deg, #485563, #29323c)'         
+      },
+      night: {
+        clear: 'linear-gradient(-45deg, #0f0c29, #302b63, #24243e)', 
+        cloud: 'linear-gradient(-45deg, #000000, #434343)',        
+        rain:  'linear-gradient(-45deg, #000000, #0f0c29)',        
+        snow:  'linear-gradient(-45deg, #1e130c, #9a8478)',        
+        fog:   'linear-gradient(-45deg, #3E5151, #DECBA4)'          
+      }
+    };
+
+    /* --- WEATHER LOGIC --- */
+    let currentWeatherType = 'clear'; 
+
+    function initWeather() {
+      if (!navigator.geolocation) return;
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`)
+            .then(response => response.json())
+            .then(data => {
+              const temp = Math.round(data.current_weather.temperature);
+              const code = data.current_weather.weathercode;
+              
+              let iconClass = "is-sun"; 
+              if (code > 0 && code <= 3) { iconClass = "is-cloud"; currentWeatherType = 'cloud'; }
+              else if (code >= 45 && code <= 48) { iconClass = "is-fog"; currentWeatherType = 'fog'; }
+              else if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) { iconClass = "is-rain"; currentWeatherType = 'rain'; }
+              else if ((code >= 71 && code <= 77) || (code >= 85 && code <= 86)) { iconClass = "is-snow"; currentWeatherType = 'snow'; }
+              else { currentWeatherType = 'clear'; }
+              
+              const iconEl = document.getElementById("weatherIcon");
+              const tempEl = document.getElementById("weatherTemp");
+              const container = document.getElementById("weatherContainer");
+
+              iconEl.className = `weather-icon ${iconClass}`;
+              tempEl.textContent = `${temp}°`;
+              container.classList.add("visible");
+
+              updateBackground(getPhase(new Date().getHours()));
+            })
+            .catch(err => {
+              console.log("Weather fetch failed.");
+            });
+        },
+        (error) => {
+          console.log("Location access denied.");
+        }
+      );
+    }
+
+    /* --- APP LOGIC --- */
+    function getPhase(hour) {
+      if (hour >= 5 && hour < 12) return "morning";
+      if (hour >= 12 && hour < 17) return "afternoon";
+      if (hour >= 17 && hour < 21) return "evening";
+      return "night";
+    }
+
+    function getTestHour() {
+        const params = new URLSearchParams(window.location.search);
+        const hour = params.get('hour');
+        return hour ? parseInt(hour) : null;
+    }
+
+    let currentPhase = "";
+    let lastPhraseIndex = -1; 
+
+    function updatePrimaryText(phase) {
+      const primaryText = document.getElementById("primaryText");
+      const phrases = primaryPhrases[phase];
+      let newIndex = Math.floor(Math.random() * phrases.length);
+      
+      if (phrases.length > 1 && newIndex === lastPhraseIndex) {
+        newIndex = (newIndex + 1) % phrases.length;
+      }
+      
+      lastPhraseIndex = newIndex;
+      const phrase = phrases[newIndex];
+
+      primaryText.classList.add('is-hidden');
+      setTimeout(() => {
+        primaryText.textContent = phrase;
+        primaryText.classList.remove('is-hidden');
+      }, 800);
+    }
+
+    function updateBackground(phase) {
+      const weatherType = currentWeatherType || 'clear';
+      const newGradient = backgroundGradients[phase][weatherType];
+      
+      document.body.style.background = newGradient;
+    }
+
+    function updateClockAndPhase() {
+      const realNow = new Date();
+      const testHour = getTestHour();
+      let displayDate = realNow;
+      let hour = realNow.getHours();
+
+      if (testHour !== null) {
+          displayDate = new Date(realNow);
+          displayDate.setHours(testHour);
+          hour = testHour;
+      }
+
+      const phase = getPhase(hour);
+
+      // Update Time Display
+      document.getElementById("secondaryText").textContent =
+        displayDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) +
+        " — " + phase.charAt(0).toUpperCase() + phase.slice(1);
+
+      // Update Dynamic Background
+      updateBackground(phase);
+
+      // Handle Phase Classes
+      if (document.body.classList.contains("night") !== (phase === "night")) {
+        document.body.classList.toggle("night", phase === "night");
+        updatePrimaryText(phase);
+      }
+    }
+
+    /* --- FULLSCREEN LOGIC --- */
+    const fsBtn = document.getElementById('fs-toggle');
+    const iconExpand = document.getElementById('icon-expand');
+    const iconCompress = document.getElementById('icon-compress');
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(err => {});
+      else if (document.exitFullscreen) document.exitFullscreen();
+    }
+
+    function updateFsIcon() {
+      if (document.fullscreenElement) {
+        iconExpand.style.display = 'none'; iconCompress.style.display = 'block'; fsBtn.style.opacity = '0.5';
+      } else {
+        iconExpand.style.display = 'block'; iconCompress.style.display = 'none'; fsBtn.style.opacity = ''; 
+      }
+    }
+    fsBtn.addEventListener('click', toggleFullScreen);
+    document.addEventListener('fullscreenchange', updateFsIcon);
+
+    /* --- TIMERS --- */
+    const initialPhase = getPhase(getTestHour() || new Date().getHours());
+    updatePrimaryText(initialPhase);
+    updateClockAndPhase();
+    setInterval(updateClockAndPhase, 60 * 1000);
+    setInterval(() => {
+      const hour = getTestHour() || new Date().getHours();
+      const phase = getPhase(hour);
+      updatePrimaryText(phase);
+    }, 15 * 60 * 1000);
+    initWeather();
+  </script>
+</body>
+</html>
