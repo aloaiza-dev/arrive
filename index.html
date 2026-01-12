@@ -72,7 +72,7 @@
       justify-content: center;
       text-align: center;
       z-index: 1;
-      box-sizing: border-box; /* Ensure padding is included in height calc */
+      box-sizing: border-box;
     }
 
     /* --- EDITORIAL TYPOGRAPHY --- */
@@ -82,13 +82,15 @@
       font-size: clamp(2.5rem, 7vw, 4rem); 
       letter-spacing: 0.01em;
       line-height: 1.15;
-      margin-bottom: 64px; 
+      margin-bottom: 64px; /* More space for elegance */
       
       min-height: 2.5em; 
       display: flex; align-items: center; justify-content: center;
       transition: opacity var(--transition-speed) ease;
       opacity: 1;
+      
       text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      
       cursor: pointer;
     }
 
@@ -97,7 +99,7 @@
 
     .divider {
       width: 1px;
-      height: 60px;
+      height: 60px; /* Vertical elegance */
       background: rgba(255, 255, 255, 0.3); 
       opacity: 0.8;
       margin-bottom: 32px; 
@@ -107,14 +109,14 @@
 
     .secondary {
       display: flex;
-      flex-direction: column;
+      flex-direction: column; /* Stack vertically */
       align-items: center;
       gap: 12px;
       margin-bottom: 48px;
     }
 
     .clock-time {
-      font-size: 1.4rem;
+      font-size: 1.4rem; /* Distinct size, smaller than main text */
       font-weight: 500;
       color: #F3F4F6; 
       letter-spacing: 0.02em;
@@ -123,7 +125,7 @@
 
     .date-day {
       font-family: 'Inter', system-ui, sans-serif;
-      font-size: 0.9rem;
+      font-size: 0.9rem; /* Small, unobtrusive */
       font-weight: 400;
       color: #F3F4F6;
       letter-spacing: 0.15em;
@@ -143,71 +145,71 @@
     .weather-container.visible { opacity: 0.8; transform: translateY(0); }
 
     .weather-icon { 
-      width: 48px; 
-      height: 48px;
+      /* FIX 1: Increased Base Size */
+      width: 48px; /* Was 40px */
+      height: 48px; /* Was 40px */
       position: relative; 
       margin-bottom: 8px; 
       opacity: 0.9;
     }
 
     .weather-icon.is-sun {
-      width: 32px; height: 32px; background: #fff; border-radius: 50%;
+      /* FIX 2: Bigger Sun */
+      width: 32px; /* Was 28px */
+      height: 32px; /* Was 28px */
+      background: #fff; border-radius: 50%;
       box-shadow: 0 0 20px rgba(255,255,255,0.4);
       animation: sunPulse 4s ease-in-out infinite;
     }
     @keyframes sunPulse { 0%,100% {opacity: 0.8;} 50% {opacity: 1;} }
 
     .weather-icon.is-cloud, .weather-icon.is-fog {
-      width: 44px; height: 18px; background: rgba(255,255,255,0.6); border-radius: 10px;
-      position: relative; top: 10px; 
-      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+      /* FIX 3: Bigger Clouds */
+      width: 44px; /* Was 34px */
+      height: 18px; /* Was 14px */
+      background: rgba(255,255,255,0.6); border-radius: 10px;
+      position: relative; top: 10px; box-shadow: 0 0 10px rgba(255,255,255,0.1);
     }
     .weather-icon.is-cloud::after {
       content: ''; position: absolute; 
-      width: 20px; height: 20px;
-      background: rgba(255,255,255,0.6); 
-      border-radius: 50%; 
-      top: -10px; left: 8px;
+      width: 20px; /* Was 16px */
+      height: 20px; /* Was 16px */
+      background: rgba(255,255,255,0.6); border-radius: 50%; top: -8px; left: 6px;
     }
 
     .weather-icon.is-rain {
-      width: 44px; height: 18px; background: rgba(255,255,255,0.6); border-radius: 10px;
+      /* FIX 4: Bigger Rain */
+      width: 44px; /* Was 34px */
+      height: 18px; /* Was 14px */
+      background: rgba(255,255,255,0.6); border-radius: 10px;
       position: relative; top: 10px;
     }
     .weather-icon.is-rain::before {
-      content: ''; position: absolute; 
-      width: 20px; height: 20px;
-      background: rgba(255,255,255,0.6); 
-      border-radius: 50%; 
-      top: -10px; left: 8px;
+      content: ''; position: absolute; width: 20px; height: 20px;
+      background: rgba(255,255,255,0.6); border-radius: 50%; top: -8px; left: 6px;
     }
     .weather-icon.is-rain::after {
-      content: ''; position: absolute; 
-      width: 3px; height: 5px;
-      background: rgba(255,255,255,0.8); 
-      top: 14px; left: 15.5px;
+      content: ''; position: absolute; width: 3px; height: 5px;
+      background: rgba(255,255,255,0.8); top: 14px; left: 15.5px;
       animation: drop 1.5s linear infinite;
     }
     @keyframes drop { 0% {transform: translateY(0); opacity:0;} 50% {opacity:1;} 100% {transform: translateY(6px); opacity:0;} }
 
     .weather-icon.is-snow {
-      width: 44px; height: 18px; background: rgba(255,255,255,0.6); border-radius: 10px;
+      /* FIX 5: Bigger Snow */
+      width: 44px; /* Was 34px */
+      height: 18px; /* Was 14px */
+      background: rgba(255,255,255,0.6); border-radius: 10px;
       position: relative; top: 10px;
     }
     .weather-icon.is-snow::before {
-      content: ''; position: absolute; 
-      width: 20px; height: 20px;
-      background: rgba(255,255,255,0.6); 
-      border-radius: 50%; 
-      top: -10px; left: 8px;
+      content: ''; position: absolute; width: 20px; height: 20px;
+      background: rgba(255,255,255,0.6); border-radius: 50%; top: -8px; left: 6px;
     }
     .weather-icon.is-snow::after {
-      content: ''; position: absolute; 
-      width: 5px; height: 5px;
-      background: rgba(255,255,255,0.8); 
-      border-radius: 50%;
-      top: 12px; left: 14.5px; 
-      animation: snow 2s linear infinite;
+      content: ''; position: absolute; width: 5px; height: 5px;
+      background: rgba(255,255,255,0.8); border-radius: 50%;
+      top: 12px; left: 14.5px; animation: snow 2s linear infinite;
     }
     @keyframes snow { 0% {transform: translateY(0); opacity:0;} 50% {opacity:1;} 100% {transform: translateY(6px); opacity:0;} }
 
@@ -218,7 +220,7 @@
 
     /* --- BREATHING CIRCLE (More Perceptible + No Squash) --- */
     .breathing {
-      /* FIX 2: Ensure the circle never shrinks (squashes) even in tight windows */
+      /* FIX 2: Ensure circle never shrinks (squashes) even in tight windows */
       flex-shrink: 0; 
       
       width: 140px;
@@ -227,7 +229,7 @@
       position: relative;
       z-index: 2;
       
-      /* Explicit display block to ensure it respects width/height strictly */
+      /* FIX 3: Explicit display block */
       display: block; 
 
       border: 2px solid rgba(255, 255, 255, 0.4);
@@ -237,7 +239,7 @@
     }
 
     .breathing::before {
-      /* FIX 3: Don't squash the glow either */
+      /* FIX 4: Don't squash glow either */
       flex-shrink: 0;
       
       content: "";
@@ -564,6 +566,12 @@
       const phase = getPhase(hour);
       updatePrimaryText(phase);
     }, 15 * 60 * 1000);
+
+    // Auto-update Weather (Same frequency as phrases to stay synced)
+    setInterval(() => {
+      initWeather(); 
+    }, 15 * 60 * 1000);
+
     initWeather();
   </script>
 </body>
